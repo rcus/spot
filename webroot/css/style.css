@@ -16,16 +16,6 @@ h1 {
 
 
 /**
- * Layout of the main page elements 
- */
-#wrapper {
-  margin: 0 auto;
-  width: 980px; 
-  padding: 10px;
-}
-
-
-/**
  * Layout for header
  */
 #header {
@@ -46,6 +36,16 @@ h1 {
   left: 130px;
   font-style: italic;
   color: #666;
+}
+
+
+/**
+ * Layout of the main page elements 
+ */
+#wrapper {
+  margin: 0 auto;
+  width: 980px; 
+  padding: 10px;
 }
 
 
