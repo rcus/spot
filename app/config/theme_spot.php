@@ -1,7 +1,7 @@
 <?php
 /**
  * Config-file for Anax, theme related settings, return it all as array.
- *
+ * For Spotify In Sight, based on theme.php.
  */
 return [
 
@@ -17,6 +17,18 @@ return [
     ],
 
     
+    /**
+     * Database connections
+     */
+    'db' => [
+        'dsn'            => 'mysql:host=blu-ray.student.bth.se;dbname=matg12;',
+        'username'       => 'matg12',
+        'password'       => 'T]FF5vI%',
+        'driver_options' => array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'UTF8'"),
+        'table_prefix'   => 'spot_'
+    ],
+
+
     /** 
      * Add default views.
      */
