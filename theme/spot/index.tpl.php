@@ -13,6 +13,11 @@
 
 <body>
 
+<div id='adminbar'>
+<?php if(isset($adminbar)) echo $adminbar?>
+<?php $this->views->render('adminbar')?>
+</div>
+
 <div id='header'>
 <?php if(isset($header)) echo $header?>
 <?php $this->views->render('header')?>

@@ -13,7 +13,7 @@ $app->navbar->configure(ANAX_APP_PATH . 'config/navbar_spot.php');
 // Home route
 $app->router->add('', function() use ($app) {
     $app->views->add('spot/index');
-    $app->theme->setTitle("Spotify In Sight");
+    $app->theme->setTitle("All you want to know about Spotify");
 });
 
 // Route to show welcome to dice

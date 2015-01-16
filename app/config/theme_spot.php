@@ -33,6 +33,7 @@ return [
      * Add default views.
      */
     'views' => [
+        ['region' => 'adminbar', 'template' => 'spot/adminbar', 'data' => [], 'sort' => -1],
         ['region' => 'header', 'template' => 'spot/header', 'data' => [], 'sort' => -1],
         ['region' => 'navbar', 'template' => [
                 'callback' => function() { return $this->di->navbar->create(); },
@@ -53,7 +54,7 @@ return [
         'title_append' => ' | Spotify in sight',
 
         // Stylesheets
-        'stylesheets' => ['css/style.css', 'css/navbar.css'],
+        'stylesheets' => ['css/normalize.css', 'css/style.css', 'css/navbar.css', '//fonts.googleapis.com/css?family=Slabo+27px'],
 
         // Inline style
         'style' => null,

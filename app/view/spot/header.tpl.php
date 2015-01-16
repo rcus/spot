@@ -1,3 +1,3 @@
-<img class='sitelogo' src='<?=$this->url->asset("img/anax.png")?>' alt='Logo'/>
-<span class='sitetitle'><?=isset($siteTitle) ? $siteTitle : "Spotify In Sight"?></span>
-<span class='siteslogan'><?=isset($siteTagline) ? $siteTagline : "All you want to know about Spotify"?></span>
+<div>
+<span class='sitetitle'><a href='<?=$this->url->create()?>'><?=isset($siteTitle) ? $siteTitle : "Spotify In Sight"?></a></span>
+</div>
