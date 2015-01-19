@@ -54,7 +54,8 @@ return [
         'title_append' => ' | Spotify in sight',
 
         // Stylesheets
-        'stylesheets' => ['css/normalize.css', 'css/style.css', 'css/navbar.css', '//fonts.googleapis.com/css?family=Slabo+27px'],
+        'stylesheets' => ['css/normalize.css', 'css/style.css', 'css/navbar.css',
+            '//fonts.googleapis.com/css?family=Slabo+27px', '//fonts.googleapis.com/css?family=Open+Sans'],
 
         // Inline style
         'style' => null,

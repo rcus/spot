@@ -6,7 +6,7 @@
 
 body {
   color: #333;
-  font-family: verdana, arial, sans-serif;
+  font-family: 'Open Sans', sans-serif;
   overflow-y: scroll;
 }
 
@@ -40,7 +40,7 @@ h1 {
   box-shadow: 0px 5px 10px #666;
 }
 
-#header div {
+#header > div {
   height: 100px;
   width: 880px;
   margin: 0 auto 40px;
@@ -52,7 +52,9 @@ h1 {
 
 .sitetitle {
   display: block;
+  float: left;
   padding-top: 24px;
+  padding-right: 100px;
   font-family: 'Slabo 27px', sans-serif;
   font-size: 48px;
 }
@@ -65,7 +67,6 @@ h1 {
 .sitetitle a:visited {
   color: #fff;
 }
-
 
 
 /**

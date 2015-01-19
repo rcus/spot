@@ -14,22 +14,17 @@
 <body>
 
 <div id='adminbar'>
-<?php if(isset($adminbar)) echo $adminbar?>
-<?php $this->views->render('adminbar')?>
+    <?php if(isset($adminbar)) echo $adminbar?>
+    <?php $this->views->render('adminbar')?>
 </div>
 
 <div id='header'>
-<?php if(isset($header)) echo $header?>
-<?php $this->views->render('header')?>
+    <?php if(isset($header)) echo $header?>
+    <?php $this->views->render('header')?>
 </div>
+
 
 <div id='wrapper'>
-
-<?php if ($this->views->hasContent('navbar')) : ?>
-<div id='navbar'>
-<?php $this->views->render('navbar')?>
-</div>
-<?php endif; ?>
 
 <div id='main'>
 <?php if(isset($main)) echo $main?>
