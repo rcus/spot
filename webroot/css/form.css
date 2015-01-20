@@ -1,6 +1,11 @@
 /**
  * Style for forms
  */
+form {
+  width: 530px;
+  margin: 0 auto;
+}
+
 label {
   font-size: smaller;
 }
@@ -22,7 +27,23 @@ textarea {
   min-height: 200px;
 }
 
+form p {
+  margin-bottom: 0;
+}
+
+p.cf-desc {
+  margin-top: 0;
+  font-size: smaller;
+  font-style: italic;
+}
+
 p.buttons {
   padding-top: 22px;
   padding-bottom: 22px;
 } 
+
+.validation-message {
+    margin-top: 4px;
+    list-style-type: none;
+    color: red;
+}

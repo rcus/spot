@@ -12,37 +12,20 @@ $app->navbar->configure(ANAX_APP_PATH . 'config/navbar_spot.php');
 
 // Home route
 $app->router->add('', function() use ($app) {
+    $app->theme->setTitle("Allt du vill fråga om Spotify");
     $app->views->add('spot/index');
-    $app->theme->setTitle("All you want to know about Spotify");
 });
 
-// Route to show welcome to dice
-$app->router->add('dice', function() use ($app) {
-    $app->views->add('spot/index');
-    $app->theme->setTitle("Roll a dice");
-});
-
-// Route to roll dice and show results
-$app->router->add('dice/roll', function() use ($app) {
-
-    // Check how many rolls to do
-    $roll = $app->request->getGet('roll', 1);
-    $app->validate->check($roll, ['int', 'range' => [1, 100]])
-        or die("Roll out of bounds");
-
-    // Make roll and prepare reply
-    $dice = new \Mos\Dice\CDice();
-    $dice->roll($roll);
-
-    $app->views->add('dice/index', [
-        'roll'      => $dice->getNumOfRolls(),
-        'results'   => $dice->getResults(),
-        'total'     => $dice->getTotal(),
+// About
+$app->router->add('about', function() use ($app) {
+    $app->theme->setTitle("Om");
+    $content = $app->textFilter->doFilter($app->fileContent->get('about.md'), 'shortcode, markdown');
+    $app->views->add('spot/page', [
+        'content' => $content
     ]);
-
-    $app->theme->setTitle("Rolled a dice");
-
 });
+
+
 
 
 // Check for matching routes and dispatch to controller/handler of route and render the page

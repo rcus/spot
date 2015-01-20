@@ -1,0 +1,50 @@
+/**
+ * Style for users
+ */
+#questions {
+  
+}
+
+#questions .question {
+  margin-bottom: 2em;
+  padding: 1em;
+  box-shadow: 5px 5px 10px #666;
+}
+
+#questions .question h3 {
+  margin: 0;
+}
+
+#questions .question p.date {
+  margin: 0;
+  font-size: 0.8em;
+}
+
+#questions .question img.gravatar {
+  float: left;
+  margin-right: 8px;
+  border: none;
+}
+
+#questions .question a {
+  text-decoration: none;
+}
+
+#questions .question p {
+  margin: 8px;
+}
+
+#questions .question p.links {
+  margin: 0;
+  font-size: 10px;
+}
+
+#profile img.gravatar {
+  float: left;
+  margin-right: 24px;
+  margin-bottom: 24px;
+}
+
+#profile h3:first-of-type {
+  clear: left;
+}

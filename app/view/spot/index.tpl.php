@@ -1,8 +1,8 @@
-<h1>Spotify in sight</h1>
+<h1>Spotify In Sight</h1>
 
-<p>Webbsidan skall skyddas av inloggning. Det skall gå att skapa en ny användare. Användaren skall ha en profil som kan uppdateras. Användarens bild skall vara en gravatar.</p>
+<p><del>Webbsidan skall skyddas av inloggning. Det skall gå att skapa en ny användare. Användaren skall ha en profil som kan uppdateras. Användarens bild skall vara en gravatar.</del></p>
 
-<p>Webbplatsen skall ha en förstasida, en sida för frågor, en sida för taggar och en sida för användare. Precis som Stack Overflow har. Dessutom skall det finnas en About-sida med information om webbplatsen och dig själv.</p>
+<p>Webbplatsen skall ha en förstasida, en sida för frågor, en sida för taggar <del>och en sida för användare. Precis som Stack Overflow har. Dessutom skall det finnas en About-sida med information om webbplatsen och dig själv.</del></p>
 
 <p>En användare kan ställa frågor, eller besvara dem. Alla inlägg som en användare gör kan kopplas till denna. Klickar man på en användare så ser man vilka frågor som användaren ställt och vilka frågor som besvarats.</p>
 

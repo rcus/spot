@@ -1,0 +1,43 @@
+/**
+ * Style for users
+ */
+#users {
+  
+}
+
+#users .user {
+  float: left;
+  width: 225px;
+  margin-right: 20px;
+  margin-bottom: 25px;
+  box-shadow: 5px 5px 10px #666;
+}
+
+#users .user img.gravatar {
+  float: left;
+  margin-right: 8px;
+  border: none;
+}
+
+#users .user a {
+  text-decoration: none;
+}
+
+#users .user p {
+  margin: 8px;
+}
+
+#users .user p.links {
+  margin: 0;
+  font-size: 10px;
+}
+
+#profile img.gravatar {
+  float: left;
+  margin-right: 24px;
+  margin-bottom: 24px;
+}
+
+#profile h3:first-of-type {
+  clear: left;
+}
