@@ -5,7 +5,7 @@
  */
 
 /**
- *  Prevent guests to view restricted pages.
+ * Prevent guests to view restricted pages.
  */
 function allowPage($di) {
     $allowed = array('', 'users/login', 'users/logout', 'users/add', 'about');
@@ -17,7 +17,8 @@ function allowPage($di) {
 }
 
 /**
- *  Prevent guests to view restricted pages.
+ * Prevent guests to view restricted pages.
+ * $this->di = restrictedPage($this->di);
  */
 function restrictedPage($di)
 {

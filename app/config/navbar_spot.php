@@ -15,21 +15,21 @@ return [
 
         // This is a menu item
         'home'  => [
-            'text'  => 'Frågor',
+            'text'  => 'FRÅGOR',
             'url'   => $this->di->get('url')->create('questions'),
             'title' => 'Visa alla frågor'
         ],
  
         // This is a menu item
         'test'  => [
-            'text'  => 'Taggar',
-            'url'   => $this->di->get('url')->create('tags'),
+            'text'  => 'TAGGAR',
+            'url'   => $this->di->get('url')->create('questions/tags'),
             'title' => 'Visa taggar',
         ],
  
         // This is a menu item
         'about' => [
-            'text'  =>'Användare',
+            'text'  =>'ANVÄNDARE',
             'url'   => $this->di->get('url')->create('users'),
             'title' => 'Visa användare'
         ],

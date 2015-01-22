@@ -23,39 +23,74 @@ class CQuestionsController implements \Anax\DI\IInjectionAware
     }
 
     /**
-     * List all users.
+     * List all questions.
      *
      * @return void
      */
     public function indexAction()
     {
-        $questions = $this->questions->findAll();
+        $questions = $this->questions->findQuestions();
 
         $this->theme->setTitle("Senaste frågorna");
-        $this->views->add('spot/list', [
+        $this->views->add('questions/list', [
             'questions' => $questions,
             'title' => "Senaste frågorna"
         ], 'main');
     }
 
     /**
-     * View a user.
+     * View a question.
      *
-     * @param string $acronym Acronym of user to display.
+     * @param string $id ID of question.
      * @return void
      */
-    public function viewAction($acronym = null)
+    public function viewAction($id = null)
     {
-        if (!isset($acronym)) {
+        if (!isset($id)) {
             die("Missing parameter");
         }
 
-        $user = $this->users->findByAcronym($acronym);
+        // Get question, answers and comments
+        $data = $this->questions->viewQuestion($id);
 
-        $this->theme->setTitle("Användare: ".$acronym);
-        $this->views->add('users/view', [
-            'user' => $user
+        $this->theme->setTitle($this->questions->getTitle($id));
+        $this->views->add('questions/view', [
+            'data' => $data
         ]);
+    }
+
+    /**
+     * View questions with a specific tag.
+     *
+     * @param string $id ID of question.
+     * @return void
+     */
+    public function tagsAction($id = null)
+    {
+        // Get all tags from db
+        if (is_null($id)) {
+            $tags = $this->questions->getTags();
+
+            $this->theme->setTitle("Alla taggar");
+            $this->views->add('questions/tags', [
+                'tags' => $tags,
+                'title' => "Alla taggar"
+            ], 'main');
+        }
+
+        elseif (is_numeric($id)) {
+            $questions = $this->questions->findTaggedQuestions($id);
+            $title = $this->questions->getTagName($id);
+
+            $this->theme->setTitle($title);
+            $this->views->add('questions/list', [
+                'questions' => $questions,
+                'title' => "Tagg: $title"
+            ], 'main');
+        }
+        else {
+            die("Missing parameter");
+        }
     }
 
     /**
