@@ -51,10 +51,12 @@ class CUsersController implements \Anax\DI\IInjectionAware
         }
 
         $user = $this->users->findByAcronym($acronym);
+        $data = $this->questions->findByAuthor($acronym);
 
         $this->theme->setTitle("Användare: ".$acronym);
         $this->views->add('users/view', [
-            'user' => $user
+            'user' => $user,
+            'data' => $data
         ]);
     }
 

@@ -5,31 +5,6 @@
  */
 
 /**
- * Prevent guests to view restricted pages.
- */
-function allowPage($di) {
-    $allowed = array('', 'users/login', 'users/logout', 'users/add', 'about');
-    if ( !in_array($di->request->getRoute(), $allowed) && !$di->session->has('acronym') ) {
-        $di->session->set('denied', $di->request->getRoute());
-        $di->response->redirect($di->url->create('users/login'));
-    }
-    return $di;
-}
-
-/**
- * Prevent guests to view restricted pages.
- * $this->di = restrictedPage($this->di);
- */
-function restrictedPage($di)
-{
-    if ( !$di->session->has('acronym') ) {
-        $di->session->set('denied', $di->request->getRoute());
-        $di->response->redirect($di->url->create('users/login'));
-    }
-    return $di;
-}
-
-/**
  * Get title for the webpage by concatenating page specific title with site-wide title.
  *
  * @param string $title for this page.

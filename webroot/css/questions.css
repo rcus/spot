@@ -4,6 +4,7 @@
 #questions,
 #qa,
 #tags {
+  float: left;
   width: 600px;
 }
 
@@ -13,6 +14,11 @@
   margin-bottom: 2em;
   padding: 1em;
   box-shadow: 5px 5px 10px #666;
+}
+
+#questions .question .fa-exclamation,
+#questions .question .fa-comment {
+  margin-left: 1em;
 }
 
 #questions h3 {
@@ -54,6 +60,15 @@
   box-shadow: 1px 1px 2px #666;
 }
 
+#qa p.answerLink {
+  margin-bottom: 1em;
+}
+
+.qtext {
+  width: 600px;
+  margin: 0 auto 2em;
+}
+
 /**
  * Style for comments
  */
@@ -84,6 +99,7 @@
 .tag {
   display: inline-block;
   margin-right: 0.5em;
+  margin-bottom: 1em;
   border-radius: 1em;
   -moz-border-radius: 1em;
   -webkit-border-radius: 1em;
@@ -99,4 +115,8 @@
   text-decoration: none;
   color: inherit;
   white-space: nowrap; 
+}
+
+#profile .tag {
+  margin-bottom: 0;
 }

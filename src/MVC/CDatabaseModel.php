@@ -94,7 +94,7 @@ class CDatabaseModel implements \Anax\DI\IInjectionAware
     {
         $this->setProperties($values);
         $values = $this->getProperties();
-     
+
         if (isset($values['id'])) {
             return $this->update($values);
         } else {
@@ -113,7 +113,7 @@ class CDatabaseModel implements \Anax\DI\IInjectionAware
     {
         $keys   = array_keys($values);
         $values = array_values($values);
-     
+
         $this->db->insert(
             $this->getSource(),
             $keys

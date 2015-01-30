@@ -18,6 +18,20 @@ $di->setShared('db', function() {
     return $db;
 });
 
+// Include support for questions outside of the controller
+$di->setShared('users', function() use ($di) {
+    $users = new \Rcus\Users\CUsers();
+    $users->setDI($di);
+    return $users;
+});
+
+// Include support for questions outside of the controller
+$di->setShared('questions', function() use ($di) {
+    $questions = new \Rcus\Questions\CQuestions();
+    $questions->setDI($di);
+    return $questions;
+});
+
 // Include controllers for users
 $di->setShared('UsersController', function() use ($di) {
     $controller = new \Rcus\Users\CUsersController();

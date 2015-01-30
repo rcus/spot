@@ -3,7 +3,7 @@
 namespace Rcus\Questions;
 
 /**
- * A controller for users and admin related events.
+ * A controller for question related events.
  *
  */
 class CQuestionsController implements \Anax\DI\IInjectionAware
@@ -94,86 +94,130 @@ class CQuestionsController implements \Anax\DI\IInjectionAware
     }
 
     /**
-     * Add new useraccount.
+     * Add new question.
      *
      * @return void
      */
     public function addAction()
     {
+        // Prevent guests to view restricted pages.
+        $this->users->restrictedPage();
+
         // Get the form
-        $form = self::userForm();
+        $form = self::questionForm();
 
         // Check the status of the form
         $status = $form->check();
-         
+
         if ($status === true) {
-            $this->users->save([
-                'acronym' => $form->value('acronym'),
-                'email' => $form->value('email'),
-                'name' => $form->value('name'),
-                'password' => password_hash( $form->value('password'), PASSWORD_DEFAULT)
-            ]);
-
-            $this->response->redirect($this->url->create('users/login'));
-        }
-
-        $this->theme->setTitle('Skapa konto');
-        $this->views->addString("<h1>Skapa konto</h1>" . $form->getHTML(), 'main');
-    }
-
-    /**
-     * Log in user.
-     *
-     * @return void
-     */
-    public function loginAction()
-    {
-        // Find out if referral page was restricted
-        if (empty($this->session->has('denied')))
+            $fieldsOk = true;
             $msg = "";
-        else
-            $msg = "<p>Sidan du försökte nå kräver att du är inloggad. Logga in med dina uppgifter nedan, eller <a href='{$this->url->create('users/add')}'>skapa ett konto</a>.</p>";
+            // Check if all fields are valid ($fieldsOk)
+            if (empty($form->value('title'))) {
+                $msg .= "Du måste fylla rubrik för din fråga!<br/>";
+                $fieldsOk = false;
+            }
+            if (empty($form->value('text'))) {
+                $msg .= "Du måste fylla din text!<br/>";
+                $fieldsOk = false;
+            }
+            if (empty($_POST['tags'])) {
+                $msg .= "Du måste ange minst en tagg!<br/>";
+                $fieldsOk = false;
+            }
+            $msg .= "<a href='javascript:history.back();'>Gå tillbaka till formuläret.</a>";
 
-        // Get the form
-        $form = self::loginForm($this->session->get('denied'));
-        $this->session->set('denied', null);
+            // Save data, if $fieldsOk = true
+            if ($fieldsOk) {
+                $this->questions->save([
+                    'qNo' => $form->value('qNo'),
+                    'type' => $form->value('type'),
+                    'authorId' => $this->users->getId($this->session->get('acronym')),
+                    'title' => $form->value('title'),
+                    'text' => $form->value('text'),
+                    'tags' => $_POST['tags']
+                ]);
 
-        // Check the status of the form
-        $status = $form->check();
-         
-        if ($status === true) {
-            // Get userinfo
-            $user = $this->users->findByAcronym($form->value('acronym'));
-
-            // Check if user exist and password is ok
-            if ($user && password_verify($form->value('password'), $user->getProperties()['password'])) {
-                $this->session->set('acronym', $form->value('acronym'));
-                $this->response->redirect($this->url->create($form->value('referral')));
+                $this->response->redirect($this->url->create('questions/view/'.$this->questions->id));
             }
             else {
-                $form->output = "<span style='color:red;'>Användarnamnet eller lösenordet stämmer inte. Försök igen eller skapa ett konto.</span>";
+                // Error, show msg.
+                $this->theme->setTitle('Fel i formulär');
+                $this->views->addString("<h1>Fel i formulär</h1><p>" . $msg . "</p>", 'main');
             }
         }
-
-        $this->theme->setTitle('Logga in');
-        $this->views->addString("<h1>Logga in</h1>" . $msg . $form->getHTML(), 'main');
+        else {
+            $this->theme->setTitle('Ställ en fråga');
+            $this->views->addString("<h1>Ställ en fråga</h1>" . $form->getHTML(), 'main');
+        }
     }
 
     /**
-     * Log out user.
+     * Add an answer.
      *
+     * @param int $qNo No of question to answer.
      * @return void
      */
-    public function logoutAction()
+    public function writeAction($type, $ref)
     {
-        // Unset session
-        $this->session->set('acronym', null);
-        $this->theme->setTitle('Utloggad');
-        $this->views->addString("<h1>Du har nu loggat ut</h1><p><a href='{$this->url->create('')}'>Gå tillbaka till startsidan.</a></p>", 'main');
+        // Prevent guests to view restricted pages.
+        $this->users->restrictedPage();
+
+        // Get the form
+        $type = ($type === 'answer') ? "A" : "C";
+        $form = self::textForm($type, $ref);
+
+        // Check the status of the form
+        $status = $form->check();
+
+        if ($status === true) {
+            $fieldsOk = true;
+            $msg = "";
+            // Check if all fields are valid ($fieldsOk)
+            if (empty($form->value('text'))) {
+                $msg .= "Du måste fylla din text!<br/>";
+                $fieldsOk = false;
+            }
+            $msg .= "<a href='javascript:history.back();'>Gå tillbaka till formuläret.</a>";
+
+            // Save data, if $fieldsOk = true
+            if ($fieldsOk) {
+                $this->questions->save([
+                    'qNo' => $form->value('qNo'),
+                    'commentTo' => $form->value('commentTo'),
+                    'type' => $type,
+                    'authorId' => $this->users->getId($this->session->get('acronym')),
+                    'text' => $form->value('text')
+                ]);
+
+                $this->response->redirect($this->url->create('questions/view/'.$this->questions->getqNo($ref)));
+            }
+            else {
+                // Error, show msg.
+                $this->theme->setTitle('Fel i formulär');
+                $this->views->addString("<h1>Fel i formulär</h1><p>" . $msg . "</p>", 'main');
+            }
+        }
+        else {
+
+            // Prepare for answer or comment
+            if ($type === "A") {
+                $title = "Svara på en fråga";
+                $content = "<h1>Svar till: {$this->questions->getTitle($ref)}</h1>".
+                    "<div class='qtext'>{$this->questions->getText($ref)}</div>";
+            }
+            else {
+                $title = "Lämna en kommentar";
+                $content = "<h1>Lämna en kommentar</h1>";
+            }
+            $this->theme->setTitle($title);
+            $this->views->addString($content . $form->getHTML(), 'main');
+        }
     }
 
     /**
      * Edit a user.
+
      *
      * @return void
      */
@@ -183,7 +227,7 @@ class CQuestionsController implements \Anax\DI\IInjectionAware
         $user = $this->users->findByAcronym($this->session->get('acronym'));
 
         // Get the form
-        $form = self::userForm($user);
+        $form = self::textForm($user);
 
         // Check the status of the form
         $status = $form->check();
@@ -209,59 +253,49 @@ class CQuestionsController implements \Anax\DI\IInjectionAware
         $this->views->addString("<h1>Ändra din profil</h1>" . $form->getHTML(), 'main');
     }
 
-
-
     /**
-     * Userform.
+     * Textform.
      *
-     * @param object $user user to edit.
-     *
-     * @return object the form.
+     * @param mixed $param Type to create or text to edit.
+     * @return object The form.
      */
-    private function userForm($user = null) {
+    private function questionForm($param = 'Q') {
+
+        $tags = $this->questions->getTags();
         $info = null;
-        $pwMsg = '';
-        $pwValid = ['not_empty'];
-        if (!is_null($user)) {
-            $info = $user->getProperties();
-            $pwMsg = "Fylls bara i om du vill ändra ditt lösenord.";
-            $pwValid = [];
-        }
+        $legend = 'Skriv en fråga';
+        // if (is_object($text)) {
+        //     $info = $text->getProperties();
+        //     $param = null;
+        // }
         $this->theme->addStylesheet('css/form.css');
-        $form = new \Mos\HTMLForm\CForm([], [
+        $form = new \Mos\HTMLForm\CForm(['legend' => $legend], [
                 'id' => [
                     'type'       => 'hidden',
                     'value'      => $info['id']
                 ],
-                'name' => [
+                'qNo' => [
+                    'type'       => 'hidden',
+                    'value'      => $info['qNo']
+                ],
+                'type' => [
+                    'type'       => 'hidden',
+                    'value'      => 'Q'
+                ],
+                'title' => [
                     'type'       => 'text',
-                    'label'      => 'Namn',
-                    'value'      => $info['name'],
-                    'validation' => ['not_empty']
+                    'label'      => 'Rubrik',
+                    // 'value'      => $info['title']
                 ],
-                'acronym' => [
-                    'type'       => 'text',
-                    'label'      => 'Användarnamn',
-                    'value'      => $info['acronym'],
-                    'validation' => ['not_empty']
+                'text' => [
+                    'type'       => 'textarea',
+                    'label'      => 'Text',
+                    'description'=> 'Du kan formatera din text som <a href="http://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown</a>.'
                 ],
-                'email' => [
-                    'type'       => 'text',
-                    'label'      => 'E-post',
-                    'value'      => $info['email'],
-                    'description'=> 'Används enbart till Gravatar, kommer inte att visas.',
-                    'validation' => ['not_empty', 'email_adress']
-                ],
-                'password' => [
-                    'type'       => 'password',
-                    'label'      => 'Lösenord',
-                    'description'=> $pwMsg,
-                    'validation' => $pwValid
-                ],
-                'password_confirm' => [
-                    'type'       => 'password',
-                    'label'      => 'Lösenordet igen',
-                    'validation' => ['match' => 'password']
+                'tags' => [
+                    'type'       => 'checkbox-multiple',
+                    'values'     => $tags,
+                    // 'checked'    => array('potato', 'pear')
                 ],
                 'submit' => [
                     'type'       => 'submit',
@@ -276,32 +310,62 @@ class CQuestionsController implements \Anax\DI\IInjectionAware
     }
 
     /**
-     * Login form.
+     * Textform.
      *
-     * @param object $user user to edit.
-     *
-     * @return object the form.
+     * @param mixed $param Type to create or object to edit.
+     * @param int $id Id of text to connect with answer/comment.
+     * @return object The form.
      */
-    private function loginForm($ref) {
+    private function textForm($param, $ref=null) {
+        $info = null;
+        $id = null;
+        $commentTo = null;
+        $text = null;
+        if (is_object($param)) {
+            $info = $param->getProperties();
+            $param = $info['type'];
+            $id = $info['id'];
+            $qNo = $info['qNo'];
+            $commentTo = $info['commentTo'];
+            $text = $info['text'];
+        }
+        elseif ($param === "A") {
+            $qNo = $ref;
+        }
+        else {
+            $qNo = $this->questions->getqNo($ref);
+            $commentTo = $ref;
+        }
+
+        $legend = ($param === "C") ? 'Din kommentar' : 'Ditt svar på frågan';
+
         $this->theme->addStylesheet('css/form.css');
-        $form = new \Mos\HTMLForm\CForm([], [
-                'referral' => [
+        $form = new \Mos\HTMLForm\CForm(['legend' => $legend], [
+                'id' => [
                     'type'       => 'hidden',
-                    'value'      => $ref
+                    'value'      => $id
                 ],
-                'acronym' => [
-                    'type'       => 'text',
-                    'label'      => 'Användarnamn',
-                    'validation' => ['not_empty']
+                'qNo' => [
+                    'type'       => 'hidden',
+                    'value'      => $qNo
                 ],
-                'password' => [
-                    'type'       => 'password',
-                    'label'      => 'Lösenord',
-                    'validation' => ['not_empty']
+                'commentTo' => [
+                    'type'       => 'hidden',
+                    'value'      => $commentTo
+                ],
+                'type' => [
+                    'type'       => 'hidden',
+                    'value'      => $param
+                ],
+                'text' => [
+                    'type'       => 'textarea',
+                    'label'      => 'Text',
+                    'value'      => $text,
+                    'description'=> 'Du kan formatera din text som <a href="http://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown</a>.'
                 ],
                 'submit' => [
                     'type'       => 'submit',
-                    'value'      => 'Logga in',
+                    'value'      => 'Skicka',
                     'callback'   => function ($form) {
                         $form->saveInSession = false;
                         return true;
@@ -309,56 +373,5 @@ class CQuestionsController implements \Anax\DI\IInjectionAware
                 ]
             ]);
         return $form;
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/**
- * SOME OLD STUFF
-
- */
-
-
-
-
-
-
-
-
-    /**
-     * Delete user.
-     *
-     * @param integer $id of user to delete.
-     *
-     * @return void
-     */
-    public function deleteAction($id = null)
-    {
-        if (!isset($id)) {
-            die("Missing id");
-        }
-
-        $this->users->delete($id);
-        $this->response->redirect($this->url->create('users'));
     }
 }

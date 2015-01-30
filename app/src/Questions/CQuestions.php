@@ -78,6 +78,57 @@ class CQuestions extends \Anax\MVC\CDatabaseModel
     }
 
     /**
+     * Find and return questions and answers by specific author.
+     *
+     * @param int @id Id of author.
+     * @return array
+     */
+    public function findByAuthor($acronym)
+    {
+        // Specify values to get
+        $getValues['q'] = ['id', 'title', 'created'];
+        $getValues['a'] = ['id', 'qNo', 'created'];
+
+        // Get questions from db
+        $strGetValues = implode(", ", $getValues['q']);
+        $this->db->select($strGetValues)
+                 ->from('VInfo')
+                 ->where('acronym = ? AND type = "Q"');
+
+        $this->db->execute([$acronym]);
+        $this->db->setFetchMode(\PDO::FETCH_ASSOC);
+        $data['q'] = $this->db->fetchAll();
+
+        // Add tags and statistics to questions
+        foreach (array_keys($data['q']) as $no) {
+            $data['q'][$no]['t'] = self::getTags($data['q'][$no]['id']);
+            $data['q'][$no] = array_merge($data['q'][$no], self::howMany("qNo", $data['q'][$no]['id']));
+        }
+
+        // Get answers from db
+        $strGetValues = implode(", ", $getValues['a']);
+        $this->db->select($strGetValues)
+                 ->from('VInfo')
+                 ->where('acronym = ? AND type = "A"');
+
+        $this->db->execute([$acronym]);
+        $this->db->setFetchMode(\PDO::FETCH_ASSOC);
+        $data['a'] = $this->db->fetchAll();
+
+        // Add title of question, tags and statistics to answers
+        foreach (array_keys($data['a']) as $no) {
+            $data['a'][$no]['title'] = self::getTitle($data['a'][$no]['qNo']);
+            $data['a'][$no]['t'] = self::getTags($data['a'][$no]['qNo']);
+            $data['a'][$no] = array_merge($data['a'][$no], self::howMany("qNo", $data['a'][$no]['qNo']));
+        }
+
+        // Include stylesheet for questions in theme
+        $this->theme->addStylesheet('css/questions.css');
+
+        return $data;
+    }
+
+    /**
      * Find and return a specific question with answers and comments.
      *
      * @param int $id get value of id from specific row
@@ -155,6 +206,25 @@ class CQuestions extends \Anax\MVC\CDatabaseModel
     }
 
     /**
+     * Get the id of a question (qNo) from its answers or comments.
+     *
+     * @param int $id The ID for a specific text.
+     * @return string
+     */
+    public function getqNo($id)
+    {
+        $this->db->select()
+                 ->from($this->getSource())
+                 ->where('id = ?');
+
+        $this->db->execute([$id]);
+        $this->db->setFetchMode(\PDO::FETCH_ASSOC);
+        $data = $this->db->fetchOne();
+
+        return $data['qNo'];
+    }
+
+    /**
      * Get the title for a question.
      *
      * @param int $id The ID for a specific question.
@@ -165,6 +235,19 @@ class CQuestions extends \Anax\MVC\CDatabaseModel
         $content = $this->findID($id);
         $info = $content->getProperties();
         return $info['title'];
+    }
+
+    /**
+     * Get the text for a question.
+     *
+     * @param int $id The ID for a specific question.
+     * @return string
+     */
+    public function getText($id)
+    {
+        $content = $this->findID($id);
+        $info = $content->getProperties();
+        return $info['text'];
     }
 
     /**
@@ -206,7 +289,7 @@ class CQuestions extends \Anax\MVC\CDatabaseModel
     public function howMany($col, $id)
     {
         $this->db->select('type, COUNT(type)')
-                 ->from($this->getSource())
+                 ->from('VInfo') //$this->getSource()
                  ->where($col.' = ?')
                  ->groupBy('type');
 
@@ -234,6 +317,134 @@ class CQuestions extends \Anax\MVC\CDatabaseModel
 
         return $data['tag'];
     }
+
+    /**
+     * Get the id of a tag.
+     *
+     * @param string $tag The name for a specific tag.
+     * @return int
+     */
+    public function getTagId($tag)
+    {
+        // Get tag from db
+        $this->db->select()
+                 ->from('tags')
+                 ->where('tag = ?');
+
+        $this->db->execute([$tag]);
+        $this->db->setFetchMode(\PDO::FETCH_ASSOC);
+        $data = $this->db->fetchOne();
+
+        return $data['id'];
+    }
+
+    /**
+     * Save text
+     *
+     * @param array $values key/values to save or empty to use object properties.
+     * @return boolean true or false if saving went okey.
+     */
+    public function save($values = []) {
+        // Lift out tags from values
+        if ($values['type'] === "Q") {
+            $tags = $values['tags'];
+            unset($values['tags']);
+        }
+
+        // Set commentTo to NULL if empty
+        if ($values['commentTo'] === "") {
+            unset($values['commentTo']);
+        }
+
+        // Save text and get id
+        $ret = parent::save($values);
+        $id = $this->id;
+
+        // Update with qNo if not exist
+        if (empty($values['qNo'])) {
+            $this->update([
+                'id' => $id,
+                'qNo' => $id
+            ]);
+        }
+
+        // Save tags
+        if ($values['type'] === "Q") {
+            $ret = $this->saveTags($id, $tags);
+        }
+
+        return $ret;
+    }
+
+
+    /**
+     * Create new row.
+     *
+     * @param array $values key/values to save.
+     * @return boolean true or false if saving went okey.
+     */
+/*    public function create($values)
+    {
+        // Lift out tags from values
+        if ($values['type'] === "Q") {
+            $tags = $values['tags'];
+            unset($values['tags']);
+        }
+
+        // Create text and get id
+        $ret = parent::create($values);
+        $id = $this->id;
+
+        // Update with qNo if not exist
+        if (empty($values['qNo'])) {
+            $this->update([
+                'id' => $id,
+                'qNo' => $id
+            ]);
+        }
+
+        // Save tags
+        if ($values['type'] === "Q") {
+            $ret = $this->saveTags($id, $tags);
+        }
+
+        return $ret;
+    }
+*/
+
+
+    /**
+     * Create new row.
+     *
+     * @param array $values key/values to save.
+     * @return boolean true or false if saving went okey.
+     */
+    public function saveTags($id, $tags)
+    {
+        // Prepare tags in array
+        foreach ($tags as $tag) {
+            $values[] = [$id, $this->getTagId($tag)];
+        }
+
+        // Delete old tags
+        $this->db->delete(
+            'tagged',
+            'qNo = ?'
+        );
+        $ret = $this->db->execute([$id]);
+
+        // Add new tags
+        $this->db->insert(
+            'tagged',
+            ['qNo', 'tagId']
+        );
+        foreach ($values as $val) {
+            $ret = $this->db->execute($val);
+        }
+
+        return $ret;
+    }
+
 
 
 /**

@@ -15,6 +15,12 @@ $strQuestion = "<p class='name'><a href='{$this->url->create('users/view/'.$data
     "<p class='tags'>$strTags</p>".
     GetComments($data['q']['id'], $data['c']);
 
+// Prepare link for write a answer
+$strWriteAnswer = "";
+if ($this->session->has('acronym')) {
+    $strWriteAnswer = "<p class='answerLink'><a href='{$this->url->create('questions/write/answer/'.$data['q']['id'])}'>Svara på frågan.</a></p>";
+}
+
 // Get answers as HTML in a string
 $strAnswers = "";
 $noOfAnswers = 0;
@@ -42,6 +48,9 @@ function GetComments($id, $comments) {
                 "</p>";
         }
     }
+    if ($di->session->has('acronym')) {
+        $html .= "<p class='comment'><a href='{$di->url->create('questions/write/comment/'.$id)}'><i class='fa fa-comment'></i> Lämna en kommentar</a></p>";
+    }
     return $html;
 }
 ?>
@@ -54,7 +63,8 @@ function GetComments($id, $comments) {
     </div>
 
     <h2><?=$noOfAnswers?> svar</h2>
+    <?=$strWriteAnswer?>
     <div class="answers">
-       <?=$strAnswers?>
+        <?=$strAnswers?>
     </div>
 </div>

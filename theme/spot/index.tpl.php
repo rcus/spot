@@ -26,7 +26,7 @@
 
 <div id='wrapper'>
 
-<div id='main'>
+<div id='main' class='clearboth'>
 <?php if(isset($main)) echo $main?>
 <?php $this->views->render('main')?>
 </div>

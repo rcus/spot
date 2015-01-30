@@ -43,7 +43,8 @@ return [
 
         // Stylesheets
         'stylesheets' => ['css/normalize.css', 'css/style.css', 'css/navbar.css',
-            '//fonts.googleapis.com/css?family=Slabo+27px', '//fonts.googleapis.com/css?family=Open+Sans'],
+            '//fonts.googleapis.com/css?family=Slabo+27px', '//fonts.googleapis.com/css?family=Open+Sans',
+            '//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'],
 
         // Inline style
         'style' => null,
