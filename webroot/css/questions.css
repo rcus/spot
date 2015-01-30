@@ -44,7 +44,7 @@
 }
 
 #questions p.name,
-#qa p.text {
+#qa div.text {
   margin-top: 12px;
 }
 
@@ -55,7 +55,7 @@
   box-shadow: 2px 2px 4px #666;
 }
 
-#qa p.comment img.gravatar {
+#qa div.comment img.gravatar {
   margin-right: 0.2em;
   box-shadow: 1px 1px 2px #666;
 }
@@ -72,23 +72,23 @@
 /**
  * Style for comments
  */
-#qa p.comment {
+#qa div.comment {
   margin-top: 12px;
   border-top: 1px solid #666;
   padding: 4px 0;
   font-size: 0.8em;
 }
 
-#qa p.comment + p.comment {
+#qa div.comment + div.comment {
   margin-top: 0;
   border-top: 1px dotted #666;
 }
 
-#qa p.comment .name {
+#qa div.comment .name {
   font-size: 0.9em;
 }
 
-#qa p.comment .info {
+#qa div.comment .info {
   color: #999;
   font-size: 0.9em;
 }

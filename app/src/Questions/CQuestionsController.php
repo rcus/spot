@@ -204,7 +204,7 @@ class CQuestionsController implements \Anax\DI\IInjectionAware
             if ($type === "A") {
                 $title = "Svara på en fråga";
                 $content = "<h1>Svar till: {$this->questions->getTitle($ref)}</h1>".
-                    "<div class='qtext'>{$this->questions->getText($ref)}</div>";
+                    "<div class='qtext'>{$this->textFilter->doFilter($this->questions->getText($ref), 'shortcode, markdown')}</div>";
             }
             else {
                 $title = "Lämna en kommentar";

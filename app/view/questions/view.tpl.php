@@ -8,9 +8,11 @@ foreach ($data['t'] as $id => $tag) {
 }
 
 // Get the question as HTML in a string
+    // $content = $app->textFilter->doFilter($app->fileContent->get('about.md'), 'shortcode, markdown');
+
 $strQuestion = "<p class='name'><a href='{$this->url->create('users/view/'.$data['q']['acronym'])}' class='userlink'>".
     "<img src='http://www.gravatar.com/avatar/{$data['q']['hash']}?d=identicon&s=36' class='gravatar'> {$data['q']['name']}</a></p>".
-    "<p class='text'>{$data['q']['text']}</p>".
+    "<div class='text'>{$this->textFilter->doFilter($data['q']['text'], 'shortcode, markdown')}</div>".
     "<p class='date'>{$data['q']['created']}</p>".
     "<p class='tags'>$strTags</p>".
     GetComments($data['q']['id'], $data['c']);
@@ -28,7 +30,7 @@ foreach ($data['a'] as $a) {
     $noOfAnswers++;
     $strAnswers .= "<div class='answer'>".
         "<p class='name'><a href='{$this->url->create('users/view/'.$a['acronym'])}' class='userlink'><img src='http://www.gravatar.com/avatar/{$a['hash']}?d=identicon&s=36' class='gravatar'> {$a['name']}</a></p>".
-        "<p class='text'>{$a['text']}</p>".
+        "<div class='text'>{$this->textFilter->doFilter($a['text'], 'shortcode, markdown')}</div>".
         "<p class='date'>{$a['created']}</p>".
         GetComments($a['id'], $data['c']).
         "</div>";
@@ -40,16 +42,17 @@ function GetComments($id, $comments) {
     $html = "";
     if (isset($comments[$id])) {
         foreach ($comments[$id] as $c) {
-            $html .= "<p class='comment'>".
-                "<a href='{$di->url->create('users/view/'.$c['acronym'])}' class='userlink'><img src='http://www.gravatar.com/avatar/{$c['hash']}?d=identicon&s=18' class='gravatar'> ".
-                "<span class='name'>{$c['name']}</span></a><br />".
-                "{$c['text']} ".
-                "<span class='info'>{$c['created']}</span>".
-                "</p>";
+            $html .= "<div class='comment'>".
+                "<p><a href='{$di->url->create('users/view/'.$c['acronym'])}' class='userlink'><img src='http://www.gravatar.com/avatar/{$c['hash']}?d=identicon&s=18' class='gravatar'> ".
+                "<span class='name'>{$c['name']}</span></a> ".
+                "<span class='info'>{$c['created']}</span></p> ".
+                // "{$c['text']} ".
+                "<div class='ctext'>{$di->textFilter->doFilter($c['text'], 'shortcode, markdown')}</div> ".
+                "</div>";
         }
     }
     if ($di->session->has('acronym')) {
-        $html .= "<p class='comment'><a href='{$di->url->create('questions/write/comment/'.$id)}'><i class='fa fa-comment'></i> Lämna en kommentar</a></p>";
+        $html .= "<div class='comment'><a href='{$di->url->create('questions/write/comment/'.$id)}'><i class='fa fa-comment'></i> Lämna en kommentar</a></div>";
     }
     return $html;
 }

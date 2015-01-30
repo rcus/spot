@@ -102,6 +102,8 @@ class CUsersController implements \Anax\DI\IInjectionAware
             $msg = "<p>Sidan du försökte nå kräver att du är inloggad. Logga in med dina uppgifter nedan, eller <a href='{$this->url->create('users/add')}'>skapa ett konto</a>.</p>";
 
         // Get the form
+        // $ref = $this->request->getServer('HTTP_REFERER', $default = null);
+        // $form = self::loginForm($ref);
         $form = self::loginForm($this->session->get('denied'));
         $this->session->set('denied', null);
 
@@ -115,6 +117,7 @@ class CUsersController implements \Anax\DI\IInjectionAware
             // Check if user exist and password is ok
             if ($user && password_verify($form->value('password'), $user->getProperties()['password'])) {
                 $this->session->set('acronym', $form->value('acronym'));
+                // $this->response->redirect($form->value('referral'));
                 $this->response->redirect($this->url->create($form->value('referral')));
             }
             else {
@@ -251,7 +254,7 @@ class CUsersController implements \Anax\DI\IInjectionAware
      *
      * @return object the form.
      */
-    private function loginForm($ref) {
+    private function loginForm($ref=null) {
         $this->theme->addStylesheet('css/form.css');
         $form = new \Mos\HTMLForm\CForm(['legend'=>'Inloggning'], [
                 'referral' => [

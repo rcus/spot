@@ -4,7 +4,7 @@
 
 <p>Webbplatsen skall ha en förstasida, <del>en sida för frågor, en sida för taggar och en sida för användare. Precis som Stack Overflow har. Dessutom skall det finnas en About-sida med information om webbplatsen och dig själv.</del></p>
 
-<p>En användare kan ställa frågor, eller besvara dem. Alla inlägg som en användare gör kan kopplas till denna. <del>Klickar man på en användare så ser man vilka frågor som användaren ställt och vilka frågor som besvarats.</del></p>
+<p><del>En användare kan ställa frågor, eller besvara dem. Alla inlägg som en användare gör kan kopplas till denna. Klickar man på en användare så ser man vilka frågor som användaren ställt och vilka frågor som besvarats.</del></p>
 
 <p><del>En fråga kan ha en eller flera taggar kopplade till sig. När man listar en tagg kan man se de frågor som har den taggen. Klicka på en tagg för att komma till de frågor som har taggen kopplat till sig.</del></p>
 
