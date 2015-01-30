@@ -12,8 +12,19 @@ $app->navbar->configure(ANAX_APP_PATH . 'config/navbar_spot.php');
 
 // Home route
 $app->router->add('', function() use ($app) {
+    $app->theme->addStylesheet('css/questions.css');
+    $app->theme->addStylesheet('css/users.css');
     $app->theme->setTitle("Allt du vill fråga om Spotify");
-    $app->views->add('spot/index');
+
+    $questions = $app->questions->findQuestions(3);
+    $tags = $app->questions->getTags('popular');
+    $users = $app->users->findTop();
+
+    $app->views->add('spot/index', [
+            'questions' => $questions,
+            'tags' => $tags,
+            'users' => $users
+        ]);
 });
 
 // About
@@ -24,8 +35,6 @@ $app->router->add('about', function() use ($app) {
         'content' => $content
     ]);
 });
-
-
 
 
 // Check for matching routes and dispatch to controller/handler of route and render the page

@@ -8,6 +8,15 @@
   width: 600px;
 }
 
+#sidebar h2:first-child {
+  margin-top: 0;
+}
+
+#sidebar #tags {
+  width: initial;
+  padding-bottom: 24px;
+}
+
 #questions .question,
 #qa .question,
 #qa .answer {

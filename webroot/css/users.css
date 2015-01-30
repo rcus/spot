@@ -2,7 +2,6 @@
  * Style for users
  */
 #users {
-  
 }
 
 #users .user {
@@ -11,6 +10,10 @@
   margin-right: 20px;
   margin-bottom: 25px;
   box-shadow: 5px 5px 10px #666;
+}
+
+#sidebar .user {
+  width: 300px;
 }
 
 #users .user img.gravatar {

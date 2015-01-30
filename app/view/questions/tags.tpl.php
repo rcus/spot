@@ -13,3 +13,8 @@ foreach ($tags as $id => $tag) {
 <div id='tags'>
    <?=$strTags?>
 </div>
+
+<div id='sidebar'>
+    <h2>Undrar du något?</h2>
+    <div><a href='<?=$this->url->create('questions/add')?>'>Ställ en fråga</a></div>
+</div>

@@ -31,10 +31,10 @@ class CQuestionsController implements \Anax\DI\IInjectionAware
     {
         $questions = $this->questions->findQuestions();
 
-        $this->theme->setTitle("Senaste frågorna");
+        $this->theme->setTitle("Alla frågor");
         $this->views->add('questions/list', [
             'questions' => $questions,
-            'title' => "Senaste frågorna"
+            'title' => "Alla frågor"
         ], 'main');
     }
 

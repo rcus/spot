@@ -35,5 +35,6 @@ else {
 </div>
 
 <div id='sidebar'>
-    <p><a href='<?=$this->url->create('questions/add')?>'>Ställ en fråga</a></p>
+    <h2>Undrar du något?</h2>
+    <div><a href='<?=$this->url->create('questions/add')?>'>Ställ en fråga</a></div>
 </div>

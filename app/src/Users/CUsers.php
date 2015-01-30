@@ -13,12 +13,33 @@ class CUsers extends \Anax\MVC\CDatabaseModel
      *
      * @return array
      */
-    public function findAll()
-    {
+    public function findAll() {
         $objData = parent::findAll();
         foreach ($objData as $key => $value) {
             $data[$key] = $value->getProperties();
             $data[$key] = array_merge($data[$key], $this->questions->howMany('authorId', $data[$key]['id']));
+        }
+        return $data;
+    }
+
+    /**
+     * Find top three
+     *
+     * @return array
+     */
+    public function findTop() {
+        $this->db->select('authorId, acronym, name, email')
+                 ->from('VInfo')
+                 ->groupBy('authorId')
+                 ->orderBy('COUNT(authorId) DESC')
+                 ->limit(3);
+     
+        $this->db->execute();
+        $this->db->setFetchMode(\PDO::FETCH_ASSOC);
+        $users = $this->db->fetchAll();
+        $data = [];
+        foreach ($users as $key => $value) {
+            $data[] = array_merge($value, $this->questions->howMany('authorId', $value['authorId']));
         }
         return $data;
     }
@@ -60,7 +81,7 @@ class CUsers extends \Anax\MVC\CDatabaseModel
     /**
      * Prevent guests to view restricted pages.
      */
-    function restrictedPage()
+    public function restrictedPage()
     {
         if ( !$this->session->has('acronym') ) {
             $this->session->set('denied', $this->request->getRoute());

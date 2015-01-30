@@ -13,7 +13,7 @@ class CQuestions extends \Anax\MVC\CDatabaseModel
      *
      * @return array
      */
-    public function findQuestions()
+    public function findQuestions($limit=10)
     {
         // Specify values to get
         $getValues = ['id', 'title', 'created', 'name', 'acronym', 'email'];
@@ -24,7 +24,7 @@ class CQuestions extends \Anax\MVC\CDatabaseModel
                  ->from('VInfo')
                  ->where('type ="Q"')
                  ->orderby('created DESC')
-                 ->limit(10);
+                 ->limit($limit);
 
         $this->db->execute();
         $this->db->setFetchMode(\PDO::FETCH_ASSOC);
@@ -254,7 +254,7 @@ class CQuestions extends \Anax\MVC\CDatabaseModel
      * Get tags for a question.
      *
      * @param int $id The ID for a specific question.
-     * @return string
+     * @return array
      */
     public function getTags($id=null)
     {
@@ -266,6 +266,16 @@ class CQuestions extends \Anax\MVC\CDatabaseModel
 
             $this->db->execute([$id]);
             $this->db->setFetchMode(\PDO::FETCH_KEY_PAIR);
+            $data = $this->db->fetchAll();
+        }
+        elseif ($id === "popular") {
+            $this->db->select('tagId, tag, COUNT(tagId) AS amount')
+                     ->from('VTagged')
+                     ->groupBy('tagId')
+                     ->orderBy('amount DESC');
+
+            $this->db->execute();
+            $this->db->setFetchMode(\PDO::FETCH_ASSOC);
             $data = $this->db->fetchAll();
         }
         else {
