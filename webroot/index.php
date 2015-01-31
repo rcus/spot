@@ -36,6 +36,14 @@ $app->router->add('about', function() use ($app) {
     ]);
 });
 
+// Setup
+$app->router->add('setup', function() use ($app) {
+    $setup = new \Rcus\Setup\CSetup(require ANAX_APP_PATH . 'config/database_mysql.php');
+    $setup->addDemo();
+    $app->theme->setTitle("Setup");
+    $app->views->addString("<h1>Databasen är återställd</h1><p>Du har nu återställt databasen.</p>", 'main');
+});
+
 
 // Check for matching routes and dispatch to controller/handler of route and render the page
 $app->router->handle();
