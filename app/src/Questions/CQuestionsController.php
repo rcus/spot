@@ -215,43 +215,6 @@ class CQuestionsController implements \Anax\DI\IInjectionAware
         }
     }
 
-    /**
-     * Edit a user.
-
-     *
-     * @return void
-     */
-    public function editAction()
-    {
-        // Get the user
-        $user = $this->users->findByAcronym($this->session->get('acronym'));
-
-        // Get the form
-        $form = self::textForm($user);
-
-        // Check the status of the form
-        $status = $form->check();
-         
-        if ($status === true) {
-            $this->users->save([
-                'acronym' => $form->value('acronym'),
-                'email' => $form->value('email'),
-                'name' => $form->value('name')
-            ]);
-
-            if ($form->value('password') <> '') {
-                $this->users->save([
-                    'password' => password_hash( $form->value('password'), PASSWORD_DEFAULT)
-                ]);
-            }
-
-            $this->session->set('acronym', $form->value('acronym'));
-            $this->response->redirect($this->url->create('users/view/'.$form->value('acronym')));
-        }
-
-        $this->theme->setTitle('Ändra din profil');
-        $this->views->addString("<h1>Ändra din profil</h1>" . $form->getHTML(), 'main');
-    }
 
     /**
      * Textform.
