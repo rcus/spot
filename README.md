@@ -16,7 +16,7 @@ It's easy to get your own copy of Spotify In Sigth! Start to clone the entire re
 
 Installing dependencies with Composer.
 
-    git clone https://github.com/rcus/spot
+    composer intall
 
 
 If your address to Spotify In Sight is located in a directory, you need to configure the file `.htaccess`. Un-comment the line below and edit to your directory. 
