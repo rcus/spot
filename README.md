@@ -19,7 +19,7 @@ Installing dependencies with Composer.
     composer install
 
 
-If your address to Spotify In Sight is located in a directory, you need to configure the file `.htaccess`. Un-comment the line below and edit to your directory. 
+If your address to Spotify In Sight is located in a directory, you need to configure the file `webroot/.htaccess`. Un-comment the line below and edit to your directory. 
 
     RewriteBase /~matg12/phpmvc/spot/webroot/
 
