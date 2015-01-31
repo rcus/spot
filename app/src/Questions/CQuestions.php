@@ -259,7 +259,6 @@ class CQuestions extends \Anax\MVC\CDatabaseModel
     public function getTags($id=null)
     {
         if (is_numeric($id)) {
-            $this->theme->addStylesheet('css/tags.css');
             $this->db->select('tagId, tag')
                      ->from('VTagged')
                      ->where('qNo = ?');

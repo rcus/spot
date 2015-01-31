@@ -37,7 +37,7 @@ Edit the file `app/config/database_mysql.php`. Replace `HOST`, `DBNAME`, `USERNA
 
 Now are you able to create tables and views in the database. Just point your browser to `http://YOUR_PATH_TO_PROJECT/setup`, like:
 
-    http://www.student.bth.se/~matg12/phpmvc/spot/setup
+    http://www.student.bth.se/~matg12/phpmvc/spot/webroot/setup
 
 
 The setup install some demo data. If you would like to have a clean install, you have to remove - or comment - the following line (42) in `webroot/index.php` and then point your browser to setup: 
